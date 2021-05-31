@@ -8,6 +8,7 @@ class Project1 {
     minInput: HTMLInputElement;
     maxInput: HTMLInputElement;
     inputs: HTMLInputElement[] = [];
+    selectedInputs: string[] = [];
 
 
     constructor() {
@@ -16,7 +17,9 @@ class Project1 {
 
     startApp() {
         this.numberofInputs = document.querySelector('#numberofinputs');
-        this.numberofInputs.addEventListener("change", () => this.renderInput());
+        this.numberofInputs.addEventListener("change", () => {
+            this.renderInput()
+        });
         this.getInputs();
     }
 
@@ -24,12 +27,35 @@ class Project1 {
         this.numberofInputs = document.querySelector('#numberofinputs');
         const value = this.numberofInputs.value;
         const inputContainer = document.getElementById("inputs-container");
+        const removeButton = document.getElementById('remove-button') as HTMLButtonElement;
+        removeButton.hidden = false;
+        removeButton.addEventListener('click', () =>{
+            removeButton.disabled = true;
+
+            for (var selectedInput of this.selectedInputs) {
+                const selectedDiv = document.getElementById(selectedInput);
+                inputContainer.removeChild(selectedDiv);
+            }
+
+            const selectedCount = this.selectedInputs.length
+            let inputCount = Number(this.numberofInputs.value);
+            inputCount = inputCount - selectedCount;
+            this.numberofInputs.value = inputCount + ''
+
+            this.selectedInputs = [];
+            removeButton.disabled = false;
+        })
         while (inputContainer.firstChild) {
             inputContainer.firstChild.remove();
         }
         this.inputs = [];
 
         for (let i = 0; i < Number(value); i++) {
+
+            const inputSelection = document.createElement('input');
+            const inputSelectionId = "c" + i;
+            inputSelection.setAttribute('type', "checkbox");
+            inputSelection.setAttribute('id', "c" + i);
 
             const inputElement = document.createElement('input');
             const inputElementId = "i" + i;
@@ -48,7 +74,9 @@ class Project1 {
             deleteButton.setAttribute("id", "b" + i);
             deleteButton.innerText = 'X';
 
-            deleteButton.addEventListener('click', (event: Event) => {
+
+
+            deleteButton.addEventListener('click', () => {
                 inputContainer.removeChild(inputDiv);
 
                 let inputCount = Number(this.numberofInputs.value);
@@ -58,14 +86,27 @@ class Project1 {
             })
 
             const inputDiv = document.createElement('div');
-            inputDiv.id = "div" + i;
+            const inputDivId = "div" + i;
+            inputDiv.id = inputDivId;
+
+            inputDiv.appendChild(inputSelection);
             inputDiv.appendChild(inputElement);
             inputDiv.appendChild(inputSpinner);
             inputDiv.appendChild(deleteButton);
 
-
             inputContainer.appendChild(inputDiv);
             this.inputs.push(<HTMLInputElement>inputElement);
+
+            inputSelection.addEventListener('change', (event: Event) => {
+                if(inputSelection.checked){
+                this.selectedInputs.push(inputDivId);
+                }
+                else {
+                    this.selectedInputs.filter(function(value, index, arr){
+                        return value != inputDivId;
+                    });
+                }
+            })
 
 
             inputElement.addEventListener('input', () => this.computeData());

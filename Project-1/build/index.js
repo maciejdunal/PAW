@@ -1,12 +1,15 @@
 var Project1 = /** @class */ (function () {
     function Project1() {
         this.inputs = [];
+        this.selectedInputs = [];
         this.startApp();
     }
     Project1.prototype.startApp = function () {
         var _this = this;
         this.numberofInputs = document.querySelector('#numberofinputs');
-        this.numberofInputs.addEventListener("change", function () { return _this.renderInput(); });
+        this.numberofInputs.addEventListener("change", function () {
+            _this.renderInput();
+        });
         this.getInputs();
     };
     Project1.prototype.renderInput = function () {
@@ -14,11 +17,31 @@ var Project1 = /** @class */ (function () {
         this.numberofInputs = document.querySelector('#numberofinputs');
         var value = this.numberofInputs.value;
         var inputContainer = document.getElementById("inputs-container");
+        var removeButton = document.getElementById('remove-button');
+        removeButton.hidden = false;
+        removeButton.addEventListener('click', function () {
+            removeButton.disabled = true;
+            for (var _i = 0, _a = _this.selectedInputs; _i < _a.length; _i++) {
+                var selectedInput = _a[_i];
+                var selectedDiv = document.getElementById(selectedInput);
+                inputContainer.removeChild(selectedDiv);
+            }
+            var selectedCount = _this.selectedInputs.length;
+            var inputCount = Number(_this.numberofInputs.value);
+            inputCount = inputCount - selectedCount;
+            _this.numberofInputs.value = inputCount + '';
+            _this.selectedInputs = [];
+            removeButton.disabled = false;
+        });
         while (inputContainer.firstChild) {
             inputContainer.firstChild.remove();
         }
         this.inputs = [];
         var _loop_1 = function (i) {
+            var inputSelection = document.createElement('input');
+            var inputSelectionId = "c" + i;
+            inputSelection.setAttribute('type', "checkbox");
+            inputSelection.setAttribute('id', "c" + i);
             var inputElement = document.createElement('input');
             var inputElementId = "i" + i;
             inputElement.setAttribute("id", inputElementId);
@@ -33,19 +56,31 @@ var Project1 = /** @class */ (function () {
             var deleteButton = document.createElement('button');
             deleteButton.setAttribute("id", "b" + i);
             deleteButton.innerText = 'X';
-            deleteButton.addEventListener('click', function (event) {
+            deleteButton.addEventListener('click', function () {
                 inputContainer.removeChild(inputDiv);
                 var inputCount = Number(_this.numberofInputs.value);
                 inputCount = inputCount - 1;
                 _this.numberofInputs.value = inputCount + '';
             });
             var inputDiv = document.createElement('div');
-            inputDiv.id = "div" + i;
+            var inputDivId = "div" + i;
+            inputDiv.id = inputDivId;
+            inputDiv.appendChild(inputSelection);
             inputDiv.appendChild(inputElement);
             inputDiv.appendChild(inputSpinner);
             inputDiv.appendChild(deleteButton);
             inputContainer.appendChild(inputDiv);
             this_1.inputs.push(inputElement);
+            inputSelection.addEventListener('change', function (event) {
+                if (inputSelection.checked) {
+                    _this.selectedInputs.push(inputDivId);
+                }
+                else {
+                    _this.selectedInputs.filter(function (value, index, arr) {
+                        return value != inputDivId;
+                    });
+                }
+            });
             inputElement.addEventListener('input', function () { return _this.computeData(); });
             inputElement.addEventListener('input', function () { return _this.inputValidation(inputElementId, inputSpinnerId); });
             inputElement.addEventListener('change', function () { return _this.inputValidation(inputElementId, inputSpinnerId); });
