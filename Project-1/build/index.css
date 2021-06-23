@@ -1,0 +1,23 @@
+.content{
+    max-width: 500px;
+    margin: auto;
+}
+.inputCount{
+    display: block;
+}
+
+
+.aggr{
+    margin-top: 100px;
+
+}
+.aggregate-l{
+
+
+    display: block;
+}
+
+.aggregate-i{
+    border: 5px solid black;
+    display: block;
+}
