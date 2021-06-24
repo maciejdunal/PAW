@@ -7,9 +7,9 @@
   <button mat-raised-button color="primary" (click)="checkWeather()">Add</button>
 
   <div *ngFor="let weather of weathers">
-    <div>{{cityName}}</div>
-    <div>{{weather.main.temp}}</div>
-    <div>{{weather.main.humidity}}</div>
+    <div>{{weather.cityName}}</div>
+    <div>{{weather.weatherResponse.main.temp}}</div>
+    <div>{{weather.weatherResponse.main.humidity}}</div>
   </div>
 
 
