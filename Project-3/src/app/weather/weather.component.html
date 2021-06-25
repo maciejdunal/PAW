@@ -22,8 +22,8 @@
 <div class="first">
   <div class="cities">
     <div class="city" *ngFor="let weather of weathers">
-      <div style="text-align: center"><img src="../../assets/icons/{{'11n@2x'}}.png"/></div>
-      <!--<div style="text-align: center"><img src="../../assets/icons/{{weather.weatherResponse.weather.icon}}.png"/></div>-->
+<div style="text-align: center"><img src="../../assets/icons/04d.png"/></div>
+      <div style="text-align: center"><img src="../../assets/icons/{{weather.weatherResponse.weather[0].icon}}.png"/></div>
       <div class="cities-city"><img class="images" src="../../assets/icons/localization.png"/>{{weather.cityName}}</div>
       <div class="cities-city"><img class="images"
                                     src="../../assets/icons/temperature.png"/>{{(weather.weatherResponse.main.temp - 273.15).toFixed(1)}}

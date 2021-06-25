@@ -31,4 +31,15 @@ main{
     gap: 40px;
 }
 
+.channel-button{
+background-color: black;
+    z-index: 1;
+    width: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
 
